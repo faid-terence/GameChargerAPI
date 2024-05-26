@@ -32,6 +32,28 @@ app.MapPost("/games", (CreateGameDto game) =>
     return Results.Created($"/games/{newGame.Id}", newGame);
 });
 
+// Update a game
+
+app.MapPut("/games/{id}", (int id, UpdateGameDto game) =>
+{
+    var existingGame = games.Find(g => g.Id == id);
+    if (existingGame == null)
+    {
+        return Results.NotFound();
+    }
+
+    var updatedGame = existingGame with
+    {
+        Name = game.Name,
+        Description = game.Description,
+        Genre = game.Genre,
+        Price = game.Price,
+        ReleaseDate = game.ReleaseDate
+    };
+
+    games[games.IndexOf(existingGame)] = updatedGame;
+    return Results.Ok(updatedGame);
+});
 app.MapGet("/", () => "Hello Terence, Welcome to ASP.NET Core!");
 
 app.Run();
