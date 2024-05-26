@@ -24,6 +24,14 @@ app.MapGet("/games/{id}", (int id) =>
     return game != null ? Results.Ok(game) : Results.NotFound();
 });
 
+// Create a new game
+app.MapPost("/games", (CreateGameDto game) =>
+{
+    var newGame = new GameDto(games.Count + 1, game.Name, game.Description, game.Genre, game.Price, game.ReleaseDate);
+    games.Add(newGame);
+    return Results.Created($"/games/{newGame.Id}", newGame);
+});
+
 app.MapGet("/", () => "Hello Terence, Welcome to ASP.NET Core!");
 
 app.Run();
