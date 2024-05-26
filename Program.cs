@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
-using GameManagement.DTOs; // Ensure this namespace is correct
+using GameManagement.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -18,6 +18,11 @@ List<GameDto> games = new List<GameDto>
 };
 
 app.MapGet("/games", () => games);
+app.MapGet("/games/{id}", (int id) =>
+{
+    var game = games.Find(g => g.Id == id);
+    return game != null ? Results.Ok(game) : Results.NotFound();
+});
 
 app.MapGet("/", () => "Hello Terence, Welcome to ASP.NET Core!");
 
