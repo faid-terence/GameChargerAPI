@@ -54,6 +54,19 @@ app.MapPut("/games/{id}", (int id, UpdateGameDto game) =>
     games[games.IndexOf(existingGame)] = updatedGame;
     return Results.Ok(updatedGame);
 });
+
+// Delete a game
+app.MapDelete("/games/{id}", (int id) =>
+{
+    var existingGame = games.Find(g => g.Id == id);
+    if (existingGame == null)
+    {
+        return Results.NotFound();
+    }
+
+    games.Remove(existingGame);
+    return Results.NoContent();
+});
 app.MapGet("/", () => "Hello Terence, Welcome to ASP.NET Core!");
 
 app.Run();
